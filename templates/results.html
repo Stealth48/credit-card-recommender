@@ -2,49 +2,65 @@
 <html>
 <head>
     <title>Recommendations</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Mobile viewport -->
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            margin: 40px;
-            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: #333;
+            min-height: 100vh;
         }
         h1 {
             text-align: center;
             color: #2c3e50;
-            margin-bottom: 30px;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
         .card {
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin: 1rem auto;
             max-width: 600px;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
         }
         .card h2 {
             color: #2980b9;
             margin-top: 0;
-            font-size: 24px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.3rem;
         }
         .card p {
             line-height: 1.6;
-            margin: 10px 0;
+            margin: 0.75rem 0;
+            font-size: 1rem;
         }
         .card strong {
             color: #7f8c8d;
         }
         .apply-btn {
             display: inline-block;
-            padding: 10px 20px;
-            background-color: #3498db;
+            padding: 0.75rem 1.5rem;
+            background: #3498db;
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            margin-top: 10px;
+            margin-top: 0.75rem;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s, transform 0.2s;
         }
         .apply-btn:hover {
-            background-color: #2980b9;
+            background: #2980b9;
+            transform: translateY(-2px);
         }
         .preferred {
             background: #ecf0f1;
@@ -53,28 +69,64 @@
         .try-again {
             display: block;
             text-align: center;
-            margin-top: 30px;
-            padding: 10px 20px;
-            background-color: #3498db;
+            margin: 2rem auto;
+            padding: 0.9rem 1.5rem;
+            background: #3498db;
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            width: 150px;
-            margin-left: auto;
-            margin-right: auto;
+            width: 200px;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s, transform 0.2s;
         }
         .try-again:hover {
-            background-color: #2980b9;
+            background: #2980b9;
+            transform: translateY(-2px);
         }
         .error {
             color: #e74c3c;
             text-align: center;
-            margin: 20px auto;
+            margin: 1rem auto;
             font-weight: bold;
-            max-width: 600px;
+            font-size: 1rem;
             background: #fcecea;
-            padding: 15px;
+            padding: 1rem;
             border-radius: 5px;
+            max-width: 600px;
+        }
+        /* Mobile adjustments */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+            .card {
+                padding: 1rem;
+                margin: 0.75rem 0;
+            }
+            .card h2 {
+                font-size: 1.25rem;
+            }
+            .card p {
+                font-size: 0.9rem;
+            }
+            .apply-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+            .try-again {
+                width: 150px;
+                font-size: 1rem;
+                padding: 0.75rem;
+            }
+            .error {
+                font-size: 0.9rem;
+                padding: 0.75rem;
+            }
         }
     </style>
 </head>
