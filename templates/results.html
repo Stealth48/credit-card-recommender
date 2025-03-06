@@ -3,7 +3,7 @@
 <head>
     <title>Recommendations</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -81,7 +81,7 @@
             border-left: 5px solid #3498db;
         }
         .preferred h2 i {
-            color: #e67e22; /* Orange for preferred */
+            color: #e67e22;
         }
         .try-again {
             display: block;
@@ -169,7 +169,8 @@
                 <h2><i class="fas fa-star"></i> Preferred Card: {{ preferred_card_name }}</h2>
                 {% for line in preferred_lines[1:] %}
                     {% if line.strip() and ':' in line %}
-                        <p><strong>{{ line.split(':')[0].strip() }}:</strong> {{ value.strip() }}</p>
+                        {% set key, value = line.split(':', 1) %}
+                        <p><strong>{{ key.strip() }}:</strong> {{ value.strip() }}</p>
                     {% endif %}
                 {% endfor %}
                 {% if preferred_card_name in card_urls %}
