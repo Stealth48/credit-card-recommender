@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recommendations</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 40px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        .card h2 {
+            color: #2980b9;
+            margin-top: 0;
+            font-size: 24px;
+        }
+        .card p {
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .card strong {
+            color: #7f8c8d;
+        }
+        .apply-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .apply-btn:hover {
+            background-color: #2980b9;
+        }
+        .preferred {
+            background: #ecf0f1;
+            border-left: 5px solid #3498db;
+        }
+        .try-again {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            width: 150px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .try-again:hover {
+            background-color: #2980b9;
+        }
+        .error {
+            color: #e74c3c;
+            text-align: center;
+            margin: 20px auto;
+            font-weight: bold;
+            max-width: 600px;
+            background: #fcecea;
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Top Card Picks</h1>
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% else %}
+        {% set card_urls = {} %}
+        {% set full_sections = result.split('- Preferred Card:') %}
+        {% set recommended_part = full_sections[0].split('- Recommended Card')[1:] %}
+        {% for section in recommended_part %}
+            {% if section.strip() %}
+                {% set card_lines = section.split('\n') %}
+                {% set raw_card_name = card_lines[0].strip() %}
+                {% set card_name = raw_card_name.split(': ', 1)[1].replace('®', '').strip() %}
+                <div class="card">
+                    <h2>{{ card_name }}</h2>
+                    {% for line in card_lines[1:] %}
+                        {% if line.strip() %}
+                            {% if 'Issuer website:' in line %}
+                                {% set url = line.split('Issuer website:')[1].strip() %}
+                                {% set _ = card_urls.update({card_name: url}) %}
+                                <p><strong>Apply Now:</strong> <a href="{{ url }}" class="apply-btn" target="_blank">Apply Now</a></p>
+                            {% elif ':' in line %}
+                                {% set key, value = line.split(':', 1) %}
+                                <p><strong>{{ key.strip() }}:</strong> {{ value.strip() }}</p>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {% if full_sections|length > 1 %}
+            {% set preferred_section = full_sections[1].strip() %}
+            {% set preferred_lines = preferred_section.split('\n') %}
+            {% set preferred_card_name = preferred_lines[0].strip().replace('®', '') %}
+            <div class="card preferred">
+                <h2>Preferred Card: {{ preferred_card_name }}</h2>
+                {% for line in preferred_lines[1:] %}
+                    {% if line.strip() and ':' in line %}
+                        <p><strong>{{ line.split(':')[0].strip() }}:</strong> {{ line.split(':')[1].strip() }}</p>
+                    {% endif %}
+                {% endfor %}
+                {% if preferred_card_name in card_urls %}
+                    <p style="text-align: center;"><a href="{{ card_urls[preferred_card_name] }}" class="apply-btn" target="_blank">Apply Now</a></p>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endif %}
+
+    <a href="/" class="try-again">Try Again</a>
+</body>
+</html>
