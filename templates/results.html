@@ -58,13 +58,14 @@
             color: #7f8c8d;
         }
         .apply-btn {
-            display: inline-block;
+            display: block; /* Changed to block for centering */
+            width: fit-content; /* Keeps button width natural */
             padding: 0.75rem 1.5rem;
             background: #3498db;
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            margin-top: 0.75rem;
+            margin: 0.75rem auto; /* Centered with auto margins */
             font-size: 1rem;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             transition: background 0.3s, transform 0.2s;
@@ -150,7 +151,7 @@
                             {% if 'Issuer website:' in line %}
                                 {% set url = line.split('Issuer website:')[1].strip() %}
                                 {% set _ = card_urls.update({card_name: url}) %}
-                                <p><strong>Apply Now:</strong> <a href="{{ url }}" class="apply-btn" target="_blank">Apply Now <i class="fas fa-external-link-alt"></i></a></p>
+                                <a href="{{ url }}" class="apply-btn" target="_blank">Apply Now <i class="fas fa-external-link-alt"></i></a>
                             {% elif ':' in line %}
                                 {% set key, value = line.split(':', 1) %}
                                 <p><strong>{{ key.strip() }}:</strong> {{ value.strip() }}</p>
@@ -174,7 +175,7 @@
                     {% endif %}
                 {% endfor %}
                 {% if preferred_card_name in card_urls %}
-                    <p style="text-align: center;"><a href="{{ card_urls[preferred_card_name] }}" class="apply-btn" target="_blank">Apply Now <i class="fas fa-external-link-alt"></i></a></p>
+                    <a href="{{ card_urls[preferred_card_name] }}" class="apply-btn" target="_blank">Apply Now <i class="fas fa-external-link-alt"></i></a>
                 {% endif %}
             </div>
         {% endif %}
