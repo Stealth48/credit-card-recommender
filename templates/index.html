@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>Credit Card Recommender</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Mobile viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> <!-- Font Awesome -->
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -19,6 +20,10 @@
             margin-bottom: 1.5rem;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
+        h1 i {
+            color: #3498db;
+            margin-right: 0.5rem;
+        }
         .form-container {
             max-width: 600px;
             margin: 0 auto;
@@ -26,13 +31,20 @@
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
         label {
-            display: block;
+            display: flex;
+            align-items: center;
             margin: 1rem 0 0.5rem;
             font-weight: bold;
             color: #7f8c8d;
             font-size: 1.1rem;
+        }
+        label i {
+            margin-right: 0.5rem;
+            color: #3498db;
+            font-size: 1.2rem;
         }
         select, input[type="text"] {
             width: 100%;
@@ -66,6 +78,9 @@
             background: #2980b9;
             transform: translateY(-2px);
         }
+        button i {
+            margin-left: 0.5rem;
+        }
         .error {
             color: #e74c3c;
             text-align: center;
@@ -76,41 +91,24 @@
             padding: 0.5rem;
             border-radius: 5px;
         }
-        /* Mobile adjustments */
         @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            h1 {
-                font-size: 1.5rem;
-                margin-bottom: 1rem;
-            }
-            .form-container {
-                padding: 1rem;
-            }
-            label {
-                font-size: 1rem;
-                margin: 0.75rem 0 0.25rem;
-            }
-            select, input[type="text"] {
-                font-size: 0.9rem;
-                padding: 0.6rem;
-            }
-            button {
-                font-size: 1rem;
-                padding: 0.75rem;
-            }
+            body { padding: 10px; }
+            h1 { font-size: 1.5rem; margin-bottom: 1rem; }
+            .form-container { padding: 1rem; }
+            label { font-size: 1rem; margin: 0.75rem 0 0.25rem; }
+            select, input[type="text"] { font-size: 0.9rem; padding: 0.6rem; }
+            button { font-size: 1rem; padding: 0.75rem; }
         }
     </style>
 </head>
 <body>
-    <h1>Unlock Your Best Credit Card Match</h1>
+    <h1><i class="fas fa-credit-card"></i> Unlock Your Best Credit Card Match</h1>
     <div class="form-container">
         {% if error %}
-            <p class="error">{{ error }}</p>
+            <p class="error"><i class="fas fa-exclamation-circle"></i> {{ error }}</p>
         {% endif %}
         <form action="/recommend" method="POST">
-            <label for="credit_score">Credit Score</label>
+            <label for="credit_score"><i class="fas fa-chart-line"></i> Credit Score</label>
             <select name="credit_score" id="credit_score">
                 <option value="Below 600">Below 600</option>
                 <option value="600-650">600-650</option>
@@ -119,10 +117,10 @@
                 <option value="750+">750+</option>
             </select>
 
-            <label for="current_card">Current Card</label>
+            <label for="current_card"><i class="fas fa-wallet"></i> Current Card</label>
             <input type="text" name="current_card" id="current_card" placeholder="e.g., Chase Freedom">
 
-            <label for="goal">Goal for New Card</label>
+            <label for="goal"><i class="fas fa-bullseye"></i> Goal for New Card</label>
             <select name="goal" id="goal">
                 <option value="Maximize cashback">Maximize cashback</option>
                 <option value="Travel rewards">Travel rewards</option>
@@ -130,14 +128,14 @@
                 <option value="No fees">No fees</option>
             </select>
 
-            <label for="annual_fee">Annual Fee Tolerance</label>
+            <label for="annual_fee"><i class="fas fa-money-bill-wave"></i> Annual Fee Tolerance</label>
             <select name="annual_fee" id="annual_fee">
                 <option value="No fees only">No fees only</option>
                 <option value="Okay if worth it">Okay if worth it</option>
                 <option value="Don’t care">Don’t care</option>
             </select>
 
-            <label for="rewards_pref">Rewards Preference</label>
+            <label for="rewards_pref"><i class="fas fa-gift"></i> Rewards Preference</label>
             <select name="rewards_pref" id="rewards_pref">
                 <option value="Cashback">Cashback</option>
                 <option value="Points">Points</option>
@@ -145,7 +143,7 @@
                 <option value="No preference">No preference</option>
             </select>
 
-            <button type="submit">Get Recommendations</button>
+            <button type="submit">Get Recommendations <i class="fas fa-arrow-right"></i></button>
         </form>
     </div>
 </body>

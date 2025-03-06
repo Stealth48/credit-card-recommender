@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>Recommendations</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Mobile viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> <!-- Font Awesome -->
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -18,6 +19,10 @@
             font-size: 2rem;
             margin-bottom: 1.5rem;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        h1 i {
+            color: #3498db;
+            margin-right: 0.5rem;
         }
         .card {
             background: white;
@@ -37,6 +42,12 @@
             font-size: 1.5rem;
             border-bottom: 2px solid #3498db;
             padding-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+        }
+        .card h2 i {
+            margin-right: 0.5rem;
+            color: #3498db;
         }
         .card p {
             line-height: 1.6;
@@ -62,9 +73,15 @@
             background: #2980b9;
             transform: translateY(-2px);
         }
+        .apply-btn i {
+            margin-left: 0.5rem;
+        }
         .preferred {
             background: #ecf0f1;
             border-left: 5px solid #3498db;
+        }
+        .preferred h2 i {
+            color: #e67e22; /* Orange for preferred */
         }
         .try-again {
             display: block;
@@ -84,6 +101,9 @@
             background: #2980b9;
             transform: translateY(-2px);
         }
+        .try-again i {
+            margin-right: 0.5rem;
+        }
         .error {
             color: #e74c3c;
             text-align: center;
@@ -95,45 +115,25 @@
             border-radius: 5px;
             max-width: 600px;
         }
-        /* Mobile adjustments */
+        .error i {
+            margin-right: 0.5rem;
+        }
         @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-            h1 {
-                font-size: 1.5rem;
-                margin-bottom: 1rem;
-            }
-            .card {
-                padding: 1rem;
-                margin: 0.75rem 0;
-            }
-            .card h2 {
-                font-size: 1.25rem;
-            }
-            .card p {
-                font-size: 0.9rem;
-            }
-            .apply-btn {
-                padding: 0.6rem 1rem;
-                font-size: 0.9rem;
-            }
-            .try-again {
-                width: 150px;
-                font-size: 1rem;
-                padding: 0.75rem;
-            }
-            .error {
-                font-size: 0.9rem;
-                padding: 0.75rem;
-            }
+            body { padding: 10px; }
+            h1 { font-size: 1.5rem; margin-bottom: 1rem; }
+            .card { padding: 1rem; margin: 0.75rem 0; }
+            .card h2 { font-size: 1.25rem; }
+            .card p { font-size: 0.9rem; }
+            .apply-btn { padding: 0.6rem 1rem; font-size: 0.9rem; }
+            .try-again { width: 150px; font-size: 1rem; padding: 0.75rem; }
+            .error { font-size: 0.9rem; padding: 0.75rem; }
         }
     </style>
 </head>
 <body>
-    <h1>Your Top Card Picks</h1>
+    <h1><i class="fas fa-trophy"></i> Your Top Card Picks</h1>
     {% if error %}
-        <div class="error">{{ error }}</div>
+        <div class="error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>
     {% else %}
         {% set card_urls = {} %}
         {% set full_sections = result.split('- Preferred Card:') %}
@@ -144,13 +144,13 @@
                 {% set raw_card_name = card_lines[0].strip() %}
                 {% set card_name = raw_card_name.split(': ', 1)[1].replace('®', '').strip() %}
                 <div class="card">
-                    <h2>{{ card_name }}</h2>
+                    <h2><i class="fas fa-credit-card"></i> {{ card_name }}</h2>
                     {% for line in card_lines[1:] %}
                         {% if line.strip() %}
                             {% if 'Issuer website:' in line %}
                                 {% set url = line.split('Issuer website:')[1].strip() %}
                                 {% set _ = card_urls.update({card_name: url}) %}
-                                <p><strong>Apply Now:</strong> <a href="{{ url }}" class="apply-btn" target="_blank">Apply Now</a></p>
+                                <p><strong>Apply Now:</strong> <a href="{{ url }}" class="apply-btn" target="_blank">Apply Now <i class="fas fa-external-link-alt"></i></a></p>
                             {% elif ':' in line %}
                                 {% set key, value = line.split(':', 1) %}
                                 <p><strong>{{ key.strip() }}:</strong> {{ value.strip() }}</p>
@@ -166,19 +166,19 @@
             {% set preferred_lines = preferred_section.split('\n') %}
             {% set preferred_card_name = preferred_lines[0].strip().replace('®', '') %}
             <div class="card preferred">
-                <h2>Preferred Card: {{ preferred_card_name }}</h2>
+                <h2><i class="fas fa-star"></i> Preferred Card: {{ preferred_card_name }}</h2>
                 {% for line in preferred_lines[1:] %}
                     {% if line.strip() and ':' in line %}
-                        <p><strong>{{ line.split(':')[0].strip() }}:</strong> {{ line.split(':')[1].strip() }}</p>
+                        <p><strong>{{ line.split(':')[0].strip() }}:</strong> {{ value.strip() }}</p>
                     {% endif %}
                 {% endfor %}
                 {% if preferred_card_name in card_urls %}
-                    <p style="text-align: center;"><a href="{{ card_urls[preferred_card_name] }}" class="apply-btn" target="_blank">Apply Now</a></p>
+                    <p style="text-align: center;"><a href="{{ card_urls[preferred_card_name] }}" class="apply-btn" target="_blank">Apply Now <i class="fas fa-external-link-alt"></i></a></p>
                 {% endif %}
             </div>
         {% endif %}
     {% endif %}
 
-    <a href="/" class="try-again">Try Again</a>
+    <a href="/" class="try-again"><i class="fas fa-undo"></i> Try Again</a>
 </body>
 </html>
