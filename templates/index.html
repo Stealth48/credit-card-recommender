@@ -3,7 +3,7 @@
 <head>
     <title>Credit Card Recommender</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -46,7 +46,7 @@
             color: #3498db;
             font-size: 1.2rem;
         }
-        select, input[type="text"] {
+        select, input[type="text"], textarea {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid #ccc;
@@ -55,10 +55,14 @@
             box-sizing: border-box;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
-        select:focus, input[type="text"]:focus {
+        select:focus, input[type="text"]:focus, textarea:focus {
             border-color: #3498db;
             box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
             outline: none;
+        }
+        textarea {
+            resize: vertical; /* Allow vertical resize only */
+            min-height: 80px;
         }
         button {
             display: block;
@@ -96,7 +100,7 @@
             h1 { font-size: 1.5rem; margin-bottom: 1rem; }
             .form-container { padding: 1rem; }
             label { font-size: 1rem; margin: 0.75rem 0 0.25rem; }
-            select, input[type="text"] { font-size: 0.9rem; padding: 0.6rem; }
+            select, input[type="text"], textarea { font-size: 0.9rem; padding: 0.6rem; }
             button { font-size: 1rem; padding: 0.75rem; }
         }
     </style>
@@ -118,7 +122,7 @@
             </select>
 
             <label for="current_card"><i class="fas fa-wallet"></i> Current Card</label>
-            <input type="text" name="current_card" id="current_card" placeholder="e.g., Chase Freedom">
+            <input type="text" name="current_card" id="current_card" placeholder="e.g., Chase Freedom, Amex Gold, or none">
 
             <label for="goal"><i class="fas fa-bullseye"></i> Goal for New Card</label>
             <select name="goal" id="goal">
@@ -126,6 +130,7 @@
                 <option value="Travel rewards">Travel rewards</option>
                 <option value="Low interest">Low interest</option>
                 <option value="No fees">No fees</option>
+                <option value="Balance transfer">Balance transfer</option>
             </select>
 
             <label for="annual_fee"><i class="fas fa-money-bill-wave"></i> Annual Fee Tolerance</label>
@@ -142,6 +147,9 @@
                 <option value="Miles">Miles</option>
                 <option value="No preference">No preference</option>
             </select>
+
+            <label for="extra_prefs"><i class="fas fa-comment-dots"></i> Anything Else You Want Us to Include?</label>
+            <textarea name="extra_prefs" id="extra_prefs" placeholder="e.g., restaurant rewards, or Uber perks"></textarea>
 
             <button type="submit">Get Recommendations <i class="fas fa-arrow-right"></i></button>
         </form>
