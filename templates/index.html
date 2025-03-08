@@ -4,7 +4,7 @@
     <title>Credit Card Recommender</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}?v=1">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -200,8 +200,11 @@
         </form>
     </div>
     <script>
-        function showSpinner() {
-            document.getElementById('spinner').style.display = 'block';
+function showSpinner() {
+            const spinner = document.getElementById('spinner');
+            spinner.style.display = 'block';
+            // Simulate delay for testing (remove later if needed)
+            setTimeout(() => {}, 2000); // 2s delay to see it
         }
     </script>
 </body>

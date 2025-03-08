@@ -4,7 +4,7 @@
     <title>Recommendations</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}?v=1">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -140,6 +140,32 @@
         .error i {
             margin-right: 0.5rem;
         }
+        .share-container {
+            text-align: center;
+            margin: 1rem auto;
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+        }
+        .share-btn {
+            display: inline-block;
+            padding: 0.6rem 1rem;
+            margin: 0 0.5rem;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s, transform 0.2s;
+        }
+        .share-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        .share-btn i {
+            margin-right: 0.5rem;
+        }
         @media (max-width: 480px) {
             body { padding: 10px; }
             h1 { font-size: 1.5rem; margin-bottom: 1rem; }
@@ -150,6 +176,7 @@
             .apply-btn { padding: 0.6rem 1rem; font-size: 0.9rem; }
             .try-again { width: 150px; font-size: 1rem; padding: 0.75rem; }
             .error { font-size: 0.9rem; padding: 0.75rem; }
+            .share-btn { padding: 0.5rem 0.75rem; font-size: 0.9rem; margin: 0.25rem; }
         }
     </style>
 </head>
@@ -210,5 +237,15 @@
     {% endif %}
 
     <a href="/" class="try-again"><i class="fas fa-undo"></i> Try Again</a>
+    {% if not error %}
+    <div class="share-container">
+        <a href="https://twitter.com/intent/tweet?text=Found%20my%20perfect%20credit%20card%20with%20this%20cool%20tool!%20Check%20it%20out:%20https://credit-card-recommender.onrender.com" class="share-btn" target="_blank">
+            <i class="fab fa-x-twitter"></i> Share on X
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://credit-card-recommender.onrender.com" class="share-btn" target="_blank">
+            <i class="fab fa-facebook-f"></i> Share on Facebook
+        </a>
+    </div>
+    {% endif %}
 </body>
 </html>
