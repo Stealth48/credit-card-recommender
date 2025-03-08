@@ -6,7 +6,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-PERPLEXITY_API_KEY = "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"  # Your key
+PERPLEXITY_API_KEY = "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"
 PERPLEXITY_API_URL = "https://api.perplexity.ai/chat/completions"
 
 # Cache file path
@@ -29,7 +29,7 @@ def get_fun_fact():
             "Content-Type": "application/json"
         }
         payload = {
-            "model": "sonar",
+            "model": "sonar",  # Changed to sonar for fun fact
             "messages": [{"role": "user", "content": prompt}],
             "max_tokens": 50
         }
@@ -109,7 +109,7 @@ def recommend():
             "Content-Type": "application/json"
         }
         payload = {
-            "model": "sonar-pro",
+            "model": "sonar-pro",  # Still sonar-pro for recommendations
             "messages": [{"role": "user", "content": prompt}],
             "max_tokens": 600
         }

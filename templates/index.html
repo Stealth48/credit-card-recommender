@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}?v=1">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 20px;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -35,6 +36,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: sticky;
+            top: 0;
+            background: #f5f7fa;
+            padding: 0.5rem 0;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
         h1 img {
             width: 30px;
@@ -50,19 +58,45 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             position: relative;
             z-index: 1;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
         }
         label {
             display: flex;
             align-items: center;
             margin: 1rem 0 0.5rem;
-            font-weight: bold;
+            font-weight: 600;
             color: #7f8c8d;
             font-size: 1.1rem;
+            position: relative;
+            cursor: help; /* Hint it’s interactive */
         }
         label i {
             margin-right: 0.5rem;
             color: #3498db;
             font-size: 1.2rem;
+        }
+        label:hover::after {
+            content: attr(data-tooltip); /* Pull from label’s data-tooltip */
+            position: absolute;
+            top: -2.2rem; /* Above label */
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c3e50;
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            z-index: 20;
+            visibility: visible;
+        }
+        label::after {
+            visibility: hidden; /* Hidden by default */
         }
         select, input[type="text"], textarea {
             width: 100%;
@@ -71,11 +105,12 @@
             border-radius: 5px;
             font-size: 1rem;
             box-sizing: border-box;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
         }
         select:focus, input[type="text"]:focus, textarea:focus {
             border-color: #3498db;
             box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+            background: #f0faff;
             outline: none;
         }
         textarea {
@@ -94,11 +129,12 @@
             font-size: 1.2rem;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: background 0.3s, transform 0.2s;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
         }
         button:hover {
             background: #2980b9;
             transform: translateY(-2px);
+            box-shadow: 0 0 10px #3498db, 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         button i {
             margin-left: 0.5rem;
@@ -131,39 +167,59 @@
             0% { transform: translate(-50%, -50%) rotate(0deg); }
             100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
+        .fun-fact-container {
+            text-align: center;
+            margin: 2rem auto;
+            max-width: 600px;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards 0.2s;
+        }
+        .fun-fact {
+            font-size: 1rem;
+            color: #2c3e50;
+            background: #ecf0f1;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .fun-fact i {
+            color: #3498db;
+            margin-right: 0.5rem;
+        }
+        footer {
+            text-align: center;
+            margin: 2rem auto;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards 0.4s;
+        }
+        footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
         @media (max-width: 480px) {
             body { padding: 10px; }
             h1 { font-size: 1.5rem; margin-bottom: 1rem; }
             h1 img { width: 24px; height: 24px; }
             .form-container { padding: 1rem; }
             label { font-size: 1rem; margin: 0.75rem 0 0.25rem; }
+            label:hover::after { font-size: 0.7rem; padding: 0.2rem 0.4rem; }
             select, input[type="text"], textarea { font-size: 0.9rem; padding: 0.6rem; }
             button { font-size: 1rem; padding: 0.75rem; }
             .spinner { width: 30px; height: 30px; }
+            .fun-fact-container { margin: 1rem auto; }
+            .fun-fact { font-size: 0.9rem; padding: 0.75rem; }
+            footer { font-size: 0.8rem; margin: 1rem auto; }
         }
-        .fun-fact-container {
-    text-align: center;
-    margin: 2rem auto;
-    max-width: 600px;
-    position: relative;
-    z-index: 1;
-}
-.fun-fact {
-    font-size: 1rem;
-    color: #2c3e50;
-    background: #ecf0f1;
-    padding: 1rem;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-.fun-fact i {
-    color: #3498db;
-    margin-right: 0.5rem;
-}
-@media (max-width: 480px) {
-    .fun-fact-container { margin: 1rem auto; }
-    .fun-fact { font-size: 0.9rem; padding: 0.75rem; }
-}
     </style>
 </head>
 <body>
@@ -180,7 +236,7 @@
             <p class="error"><i class="fas fa-exclamation-circle"></i> {{ error }}</p>
         {% endif %}
         <form action="/recommend" method="POST" onsubmit="showSpinner()">
-            <label for="credit_score"><i class="fas fa-chart-line"></i> Credit Score</label>
+            <label for="credit_score" data-tooltip="Your credit score range"><i class="fas fa-chart-line"></i> Credit Score</label>
             <select name="credit_score" id="credit_score">
                 <option value="Below 600">Below 600</option>
                 <option value="600-650">600-650</option>
@@ -189,10 +245,10 @@
                 <option value="750+">750+</option>
             </select>
 
-            <label for="current_card"><i class="fas fa-wallet"></i> Current Card</label>
+            <label for="current_card" data-tooltip="Your current credit card"><i class="fas fa-wallet"></i> Current Card</label>
             <input type="text" name="current_card" id="current_card" placeholder="e.g., Chase Freedom, Amex Gold, or none">
 
-            <label for="goal"><i class="fas fa-bullseye"></i> Goal for New Card</label>
+            <label for="goal" data-tooltip="What you want from a new card"><i class="fas fa-bullseye"></i> Goal for New Card</label>
             <select name="goal" id="goal">
                 <option value="Maximize cashback">Maximize cashback</option>
                 <option value="Travel rewards">Travel rewards</option>
@@ -201,14 +257,14 @@
                 <option value="Balance transfer">Balance transfer</option>
             </select>
 
-            <label for="annual_fee"><i class="fas fa-money-bill-wave"></i> Annual Fee Tolerance</label>
+            <label for="annual_fee" data-tooltip="Your fee preference"><i class="fas fa-money-bill-wave"></i> Annual Fee Tolerance</label>
             <select name="annual_fee" id="annual_fee">
                 <option value="No fees only">No fees only</option>
                 <option value="Okay if worth it">Okay if worth it</option>
                 <option value="Don’t care">Don’t care</option>
             </select>
 
-            <label for="rewards_pref"><i class="fas fa-gift"></i> Rewards Preference</label>
+            <label for="rewards_pref" data-tooltip="Your rewards type"><i class="fas fa-gift"></i> Rewards Preference</label>
             <select name="rewards_pref" id="rewards_pref">
                 <option value="Cashback">Cashback</option>
                 <option value="Points">Points</option>
@@ -216,7 +272,7 @@
                 <option value="No preference">No preference</option>
             </select>
 
-            <label for="extra_prefs"><i class="fas fa-comment-dots"></i> Anything Else You Want Us to Include?</label>
+            <label for="extra_prefs" data-tooltip="Extra card features"><i class="fas fa-comment-dots"></i> Anything Else You Want Us to Include?</label>
             <textarea name="extra_prefs" id="extra_prefs" placeholder="e.g., restaurant rewards, or Uber perks, you can put in anything you want us to consider for your next credit card here"></textarea>
 
             <button type="submit">Get Recommendations <i class="fas fa-arrow-right"></i></button>
@@ -225,6 +281,9 @@
     <div class="fun-fact-container">
         <p class="fun-fact"><i class="fas fa-lightbulb"></i> Fun Fact of the Day: {{ fun_fact }}</p>
     </div>
+    <footer>
+        © 2025 Credit Card Recommender | Powered by <a href="https://xai.com" target="_blank">xAI</a>
+    </footer>
     <script>
         function showSpinner() {
             document.getElementById('spinner').style.display = 'block';

@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Recommendations</title>
+    <title>Your Card Recommendations</title> <!-- 10: Dynamic Titles (handled later if needed) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}?v=1">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Poppins', sans-serif; /* 1: Consistent Typography */
             margin: 0;
             padding: 20px;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -35,6 +36,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: sticky; /* 6: Sticky Header */
+            top: 0;
+            background: #f5f7fa;
+            padding: 0.5rem 0;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease; /* 8: Smooth Transitions */
         }
         h1 img {
             width: 30px;
@@ -48,12 +56,21 @@
             padding: 1.5rem;
             margin: 1rem auto;
             max-width: 600px;
-            transition: transform 0.2s;
             position: relative;
             z-index: 1;
+            border: 1px solid; /* 2: Enhanced Card Borders */
+            border-image: linear-gradient(to right, #3498db, #c3cfe2) 1;
+            opacity: 0; /* 8: Smooth Transitions */
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
+            animation-delay: calc(0.1s * var(--card-index)); /* Staggered entry */
+        }
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
         }
         .card:hover {
             transform: translateY(-5px);
+            transition: transform 0.2s ease; /* 8: Smooth Transitions */
         }
         .card h2 {
             color: #2980b9;
@@ -87,18 +104,19 @@
             margin: 0.75rem auto;
             font-size: 1rem;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: background 0.3s, transform 0.2s;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s; /* 4: Button Glow */
         }
         .apply-btn:hover {
             background: #2980b9;
             transform: translateY(-2px);
+            box-shadow: 0 0 10px #3498db, 0 2px 5px rgba(0, 0, 0, 0.2); /* 4: Button Glow */
         }
         .apply-btn i {
             margin-left: 0.5rem;
         }
         .preferred {
             background: #ecf0f1;
-            border-left: 5px solid #3498db;
+            border-image: linear-gradient(to right, #e67e22, #ecf0f1) 1; /* 2: Enhanced Card Borders */
         }
         .preferred h2 i {
             color: #e67e22;
@@ -115,11 +133,12 @@
             width: 200px;
             font-size: 1.2rem;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: background 0.3s, transform 0.2s;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s; /* 4: Button Glow */
         }
         .try-again:hover {
             background: #2980b9;
             transform: translateY(-2px);
+            box-shadow: 0 0 10px #3498db, 0 2px 5px rgba(0, 0, 0, 0.2); /* 4: Button Glow */
         }
         .try-again i {
             margin-right: 0.5rem;
@@ -136,6 +155,8 @@
             max-width: 600px;
             position: relative;
             z-index: 1;
+            opacity: 0; /* 8: Smooth Transitions */
+            animation: fadeInUp 0.5s ease forwards;
         }
         .error i {
             margin-right: 0.5rem;
@@ -146,6 +167,8 @@
             max-width: 600px;
             position: relative;
             z-index: 1;
+            opacity: 0; /* 8: Smooth Transitions */
+            animation: fadeInUp 0.5s ease forwards 0.2s;
         }
         .share-btn {
             display: inline-block;
@@ -157,14 +180,32 @@
             border-radius: 5px;
             font-size: 1rem;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: background 0.3s, transform 0.2s;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s; /* 4: Button Glow */
         }
         .share-btn:hover {
             background: #2980b9;
             transform: translateY(-2px);
+            box-shadow: 0 0 10px #3498db, 0 2px 5px rgba(0, 0, 0, 0.2); /* 4: Button Glow */
         }
         .share-btn i {
             margin-right: 0.5rem;
+        }
+        footer {
+            text-align: center;
+            margin: 2rem auto;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            position: relative;
+            z-index: 1;
+            opacity: 0; /* 8: Smooth Transitions */
+            animation: fadeInUp 0.5s ease forwards 0.4s;
+        }
+        footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
         }
         @media (max-width: 480px) {
             body { padding: 10px; }
@@ -177,6 +218,7 @@
             .try-again { width: 150px; font-size: 1rem; padding: 0.75rem; }
             .error { font-size: 0.9rem; padding: 0.75rem; }
             .share-btn { padding: 0.5rem 0.75rem; font-size: 0.9rem; margin: 0.25rem; }
+            footer { font-size: 0.8rem; margin: 1rem auto; }
         }
     </style>
 </head>
@@ -199,7 +241,7 @@
                 {% set card_lines = section.split('\n') %}
                 {% set raw_card_name = card_lines[0].strip() %}
                 {% set card_name = raw_card_name.split(': ', 1)[1].replace('®', '').strip() %}
-                <div class="card">
+                <div class="card" style="--card-index: {{ loop.index0 }}">
                     <h2><i class="fas fa-credit-card"></i> {{ card_name }}</h2>
                     {% for line in card_lines[1:] %}
                         {% if line.strip() %}
@@ -221,7 +263,7 @@
             {% set preferred_section = full_sections[1].strip() %}
             {% set preferred_lines = preferred_section.split('\n') %}
             {% set preferred_card_name = preferred_lines[0].strip().replace('®', '') %}
-            <div class="card preferred">
+            <div class="card preferred" style="--card-index: {{ recommended_part|length }}">
                 <h2><i class="fas fa-star"></i> Preferred Card: {{ preferred_card_name }}</h2>
                 {% for line in preferred_lines[1:] %}
                     {% if line.strip() and ':' in line %}
@@ -247,5 +289,8 @@
         </a>
     </div>
     {% endif %}
+    <footer>
+        &copy; 2025 Credit Card Recommender | Powered by <a href="https://xai.com" target="_blank">xAI</a>
+    </footer>
 </body>
 </html>
