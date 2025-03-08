@@ -1,14 +1,58 @@
 from flask import Flask, request, render_template
 import requests
+import json
+import os
+from datetime import datetime
 
 app = Flask(__name__)
 
-PERPLEXITY_API_KEY = "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"
+PERPLEXITY_API_KEY = "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"  # Your key
 PERPLEXITY_API_URL = "https://api.perplexity.ai/chat/completions"
+
+# Cache file path
+CACHE_FILE = "fun_fact_cache.json"
+
+def get_fun_fact():
+    # Check cache first
+    if os.path.exists(CACHE_FILE):
+        with open(CACHE_FILE, 'r') as f:
+            cache = json.load(f)
+        cache_date = datetime.strptime(cache['date'], '%Y-%m-%d')
+        if cache_date.date() == datetime.now().date():
+            return cache['fun_fact']
+
+    # Fetch new fact if cache is old or missing
+    prompt = "Provide a short, fun fact about credit cards in one sentence."
+    try:
+        headers = {
+            "Authorization": f"Bearer {PERPLEXITY_API_KEY}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": "sonar",
+            "messages": [{"role": "user", "content": prompt}],
+            "max_tokens": 50
+        }
+        response = requests.post(PERPLEXITY_API_URL, json=payload, headers=headers)
+        response.raise_for_status()
+        
+        fun_fact = response.json().get("choices", [{}])[0].get("message", {}).get("content", "").strip()
+        print("Fun Fact Fetched:", fun_fact)
+
+        # Cache it
+        cache = {"date": datetime.now().strftime('%Y-%m-%d'), "fun_fact": fun_fact}
+        with open(CACHE_FILE, 'w') as f:
+            json.dump(cache, f)
+        return fun_fact
+
+    except Exception as e:
+        print(f"Fun Fact Error: {str(e)}")
+        return "Did you know credit cards were first used in the 1950s?"  # Fallback
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    fun_fact = get_fun_fact()
+    return render_template('index.html', fun_fact=fun_fact)
 
 @app.route('/recommend', methods=['POST'])
 def recommend():
@@ -17,10 +61,10 @@ def recommend():
     goal = request.form.get('goal', '').strip()
     annual_fee = request.form.get('annual_fee', '').strip()
     rewards_pref = request.form.get('rewards_pref', '').strip()
-    extra_prefs = request.form.get('extra_prefs', '').strip()  # New optional field
+    extra_prefs = request.form.get('extra_prefs', '').strip()
 
     if not all([credit_score, current_card, goal, annual_fee, rewards_pref]):
-        return render_template('index.html', error="Please fill out all required fields to get recommendations.")
+        return render_template('index.html', error="Please fill out all required fields to get recommendations.", fun_fact=get_fun_fact())
 
     prompt = f"""
     You are a credit card recommendation expert with up-to-date knowledge of U.S. credit cards. Based on this user:

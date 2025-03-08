@@ -141,6 +141,29 @@
             button { font-size: 1rem; padding: 0.75rem; }
             .spinner { width: 30px; height: 30px; }
         }
+        .fun-fact-container {
+    text-align: center;
+    margin: 2rem auto;
+    max-width: 600px;
+    position: relative;
+    z-index: 1;
+}
+.fun-fact {
+    font-size: 1rem;
+    color: #2c3e50;
+    background: #ecf0f1;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.fun-fact i {
+    color: #3498db;
+    margin-right: 0.5rem;
+}
+@media (max-width: 480px) {
+    .fun-fact-container { margin: 1rem auto; }
+    .fun-fact { font-size: 0.9rem; padding: 0.75rem; }
+}
     </style>
 </head>
 <body>
@@ -194,17 +217,17 @@
             </select>
 
             <label for="extra_prefs"><i class="fas fa-comment-dots"></i> Anything Else You Want Us to Include?</label>
-            <textarea name="extra_prefs" id="extra_prefs" placeholder="e.g., restaurant rewards, or Uber perks"></textarea>
+            <textarea name="extra_prefs" id="extra_prefs" placeholder="e.g., restaurant rewards, or Uber perks, you can put in anything you want us to consider for your next credit card here"></textarea>
 
             <button type="submit">Get Recommendations <i class="fas fa-arrow-right"></i></button>
         </form>
     </div>
+    <div class="fun-fact-container">
+        <p class="fun-fact"><i class="fas fa-lightbulb"></i> Fun Fact of the Day: {{ fun_fact }}</p>
+    </div>
     <script>
-function showSpinner() {
-            const spinner = document.getElementById('spinner');
-            spinner.style.display = 'block';
-            // Simulate delay for testing (remove later if needed)
-            setTimeout(() => {}, 2000); // 2s delay to see it
+        function showSpinner() {
+            document.getElementById('spinner').style.display = 'block';
         }
     </script>
 </body>
