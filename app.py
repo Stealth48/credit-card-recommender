@@ -3,6 +3,7 @@ import requests
 import json
 import os
 from datetime import datetime
+import re  # For stripping citations
 
 app = Flask(__name__)
 
@@ -20,7 +21,10 @@ def get_fun_fact():
         if cache_date.date() == datetime.now().date():
             return cache['fun_fact']
 
-    prompt = "Provide a short, fun fact about credit cards in one sentence."
+    prompt = """
+    Provide a short, fun fact about credit cards in one sentence.
+    Do not include citations or references (e.g., [1], [2]) in the response—keep it clean and standalone.
+    """
     try:
         headers = {
             "Authorization": f"Bearer {PERPLEXITY_API_KEY}",
@@ -35,6 +39,8 @@ def get_fun_fact():
         response.raise_for_status()
         
         fun_fact = response.json().get("choices", [{}])[0].get("message", {}).get("content", "").strip()
+        # Strip any lingering citations (e.g., [1], [2][3]) just in case
+        fun_fact = re.sub(r'\[\d+\](?:\s*\[\d+\])*', '', fun_fact).strip()
         print("Fun Fact Fetched:", fun_fact)
 
         cache = {"date": datetime.now().strftime('%Y-%m-%d'), "fun_fact": fun_fact}
@@ -44,7 +50,7 @@ def get_fun_fact():
 
     except Exception as e:
         print(f"Fun Fact Error: {str(e)}")
-        return "Did you know credit cards were first used in the 1950s?"
+        return "Did you know credit cards were first used in the 1950s?"  # Fallback, no citations
 
 @app.route('/')
 def home():
