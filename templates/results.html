@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Your Card Recommendations</title> <!-- 10: Dynamic Titles (handled later if needed) -->
+    <title>Your Card Recommendations</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}?v=1">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Poppins', sans-serif; /* 1: Consistent Typography */
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 20px;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -36,13 +36,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            position: sticky; /* 6: Sticky Header */
+            position: sticky;
             top: 0;
             background: #f5f7fa;
             padding: 0.5rem 0;
             z-index: 10;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease; /* 8: Smooth Transitions */
+            transition: all 0.3s ease;
         }
         h1 img {
             width: 30px;
@@ -58,19 +58,19 @@
             max-width: 600px;
             position: relative;
             z-index: 1;
-            border: 1px solid; /* 2: Enhanced Card Borders */
+            border: 1px solid;
             border-image: linear-gradient(to right, #3498db, #c3cfe2) 1;
-            opacity: 0; /* 8: Smooth Transitions */
+            opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 0.5s ease forwards;
-            animation-delay: calc(0.1s * var(--card-index)); /* Staggered entry */
+            animation-delay: calc(0.1s * var(--card-index));
         }
         @keyframes fadeInUp {
             to { opacity: 1; transform: translateY(0); }
         }
         .card:hover {
             transform: translateY(-5px);
-            transition: transform 0.2s ease; /* 8: Smooth Transitions */
+            transition: transform 0.2s ease;
         }
         .card h2 {
             color: #2980b9;
@@ -80,6 +80,12 @@
             padding-bottom: 0.3rem;
             display: flex;
             align-items: center;
+            flex-wrap: wrap; /* Handle long names */
+        }
+        .card h2 img {
+            width: 24px;
+            height: 24px;
+            margin-right: 0.5rem;
         }
         .card h2 i {
             margin-right: 0.5rem;
@@ -104,19 +110,19 @@
             margin: 0.75rem auto;
             font-size: 1rem;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: background 0.3s, transform 0.2s, box-shadow 0.3s; /* 4: Button Glow */
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
         }
         .apply-btn:hover {
             background: #2980b9;
             transform: translateY(-2px);
-            box-shadow: 0 0 10px #3498db, 0 2px 5px rgba(0, 0, 0, 0.2); /* 4: Button Glow */
+            box-shadow: 0 0 10px #3498db, 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         .apply-btn i {
             margin-left: 0.5rem;
         }
         .preferred {
             background: #ecf0f1;
-            border-image: linear-gradient(to right, #e67e22, #ecf0f1) 1; /* 2: Enhanced Card Borders */
+            border-image: linear-gradient(to right, #e67e22, #ecf0f1) 1;
         }
         .preferred h2 i {
             color: #e67e22;
@@ -133,12 +139,12 @@
             width: 200px;
             font-size: 1.2rem;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: background 0.3s, transform 0.2s, box-shadow 0.3s; /* 4: Button Glow */
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
         }
         .try-again:hover {
             background: #2980b9;
             transform: translateY(-2px);
-            box-shadow: 0 0 10px #3498db, 0 2px 5px rgba(0, 0, 0, 0.2); /* 4: Button Glow */
+            box-shadow: 0 0 10px #3498db, 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         .try-again i {
             margin-right: 0.5rem;
@@ -155,7 +161,7 @@
             max-width: 600px;
             position: relative;
             z-index: 1;
-            opacity: 0; /* 8: Smooth Transitions */
+            opacity: 0;
             animation: fadeInUp 0.5s ease forwards;
         }
         .error i {
@@ -167,7 +173,7 @@
             max-width: 600px;
             position: relative;
             z-index: 1;
-            opacity: 0; /* 8: Smooth Transitions */
+            opacity: 0;
             animation: fadeInUp 0.5s ease forwards 0.2s;
         }
         .share-btn {
@@ -180,12 +186,12 @@
             border-radius: 5px;
             font-size: 1rem;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: background 0.3s, transform 0.2s, box-shadow 0.3s; /* 4: Button Glow */
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
         }
         .share-btn:hover {
             background: #2980b9;
             transform: translateY(-2px);
-            box-shadow: 0 0 10px #3498db, 0 2px 5px rgba(0, 0, 0, 0.2); /* 4: Button Glow */
+            box-shadow: 0 0 10px #3498db, 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         .share-btn i {
             margin-right: 0.5rem;
@@ -197,7 +203,7 @@
             color: #7f8c8d;
             position: relative;
             z-index: 1;
-            opacity: 0; /* 8: Smooth Transitions */
+            opacity: 0;
             animation: fadeInUp 0.5s ease forwards 0.4s;
         }
         footer a {
@@ -213,6 +219,7 @@
             h1 img { width: 24px; height: 24px; }
             .card { padding: 1rem; margin: 0.75rem 0; }
             .card h2 { font-size: 1.25rem; }
+            .card h2 img { width: 20px; height: 20px; }
             .card p { font-size: 0.9rem; }
             .apply-btn { padding: 0.6rem 1rem; font-size: 0.9rem; }
             .try-again { width: 150px; font-size: 1rem; padding: 0.75rem; }
@@ -241,14 +248,28 @@
                 {% set card_lines = section.split('\n') %}
                 {% set raw_card_name = card_lines[0].strip() %}
                 {% set card_name = raw_card_name.split(': ', 1)[1].replace('®', '').strip() %}
+                {% set issuer_url = '' %}
+                {% for line in card_lines[1:] %}
+                    {% if 'Issuer website:' in line %}
+                        {% set issuer_url = line.split('Issuer website:')[1].strip() %}
+                        {% set _ = card_urls.update({card_name: issuer_url}) %}
+                    {% endif %}
+                {% endfor %}
+                {% set issuer = 'default' %}
+                {% if 'chase.com' in issuer_url %}{% set issuer = 'chase' %}
+                {% elif 'americanexpress.com' in issuer_url or 'amex.com' in issuer_url %}{% set issuer = 'amex' %}
+                {% elif 'citi.com' in issuer_url %}{% set issuer = 'citi' %}
+                {% elif 'capitalone.com' in issuer_url %}{% set issuer = 'capitalone' %}
+                {% endif %}
                 <div class="card" style="--card-index: {{ loop.index0 }}">
-                    <h2><i class="fas fa-credit-card"></i> {{ card_name }}</h2>
+                    <h2>
+                        <img src="{{ url_for('static', filename='icons/' + issuer + '.svg') }}" alt="{{ issuer }} logo">
+                        <i class="fas fa-credit-card"></i> {{ card_name }}
+                    </h2>
                     {% for line in card_lines[1:] %}
                         {% if line.strip() %}
                             {% if 'Issuer website:' in line %}
-                                {% set url = line.split('Issuer website:')[1].strip() %}
-                                {% set _ = card_urls.update({card_name: url}) %}
-                                <a href="{{ url }}" class="apply-btn" target="_blank">Apply Now <i class="fas fa-external-link-alt"></i></a>
+                                <a href="{{ issuer_url }}" class="apply-btn" target="_blank">Apply Now <i class="fas fa-external-link-alt"></i></a>
                             {% elif ':' in line %}
                                 {% set key, value = line.split(':', 1) %}
                                 <p><strong>{{ key.strip() }}:</strong> {{ value.strip() }}</p>
@@ -263,8 +284,18 @@
             {% set preferred_section = full_sections[1].strip() %}
             {% set preferred_lines = preferred_section.split('\n') %}
             {% set preferred_card_name = preferred_lines[0].strip().replace('®', '') %}
+            {% set issuer_url = card_urls.get(preferred_card_name, '') %}
+            {% set issuer = 'default' %}
+            {% if 'chase.com' in issuer_url %}{% set issuer = 'chase' %}
+            {% elif 'americanexpress.com' in issuer_url or 'amex.com' in issuer_url %}{% set issuer = 'amex' %}
+            {% elif 'citi.com' in issuer_url %}{% set issuer = 'citi' %}
+            {% elif 'capitalone.com' in issuer_url %}{% set issuer = 'capitalone' %}
+            {% endif %}
             <div class="card preferred" style="--card-index: {{ recommended_part|length }}">
-                <h2><i class="fas fa-star"></i> Preferred Card: {{ preferred_card_name }}</h2>
+                <h2>
+                    <img src="{{ url_for('static', filename='icons/' + issuer + '.svg') }}" alt="{{ issuer }} logo">
+                    <i class="fas fa-star"></i> Preferred Card: {{ preferred_card_name }}
+                </h2>
                 {% for line in preferred_lines[1:] %}
                     {% if line.strip() and ':' in line %}
                         {% set key, value = line.split(':', 1) %}
@@ -290,7 +321,7 @@
     </div>
     {% endif %}
     <footer>
-        &copy; 2025 Credit Card Recommender | Powered by <a href="https://xai.com" target="_blank">xAI</a>
+        © 2025 Credit Card Recommender | Powered by <a href="https://xai.com" target="_blank">xAI</a>
     </footer>
 </body>
 </html>
