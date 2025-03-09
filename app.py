@@ -13,7 +13,6 @@ PERPLEXITY_API_URL = "https://api.perplexity.ai/chat/completions"
 CACHE_FILE = "fun_fact_cache.json"
 
 def get_fun_fact():
-    # Check cache first
     if os.path.exists(CACHE_FILE):
         with open(CACHE_FILE, 'r') as f:
             cache = json.load(f)
@@ -21,7 +20,6 @@ def get_fun_fact():
         if cache_date.date() == datetime.now().date():
             return cache['fun_fact']
 
-    # Fetch new fact if cache is old or missing
     prompt = "Provide a short, fun fact about credit cards in one sentence."
     try:
         headers = {
@@ -29,7 +27,7 @@ def get_fun_fact():
             "Content-Type": "application/json"
         }
         payload = {
-            "model": "sonar",  # Changed to sonar for fun fact
+            "model": "sonar",
             "messages": [{"role": "user", "content": prompt}],
             "max_tokens": 50
         }
@@ -39,7 +37,6 @@ def get_fun_fact():
         fun_fact = response.json().get("choices", [{}])[0].get("message", {}).get("content", "").strip()
         print("Fun Fact Fetched:", fun_fact)
 
-        # Cache it
         cache = {"date": datetime.now().strftime('%Y-%m-%d'), "fun_fact": fun_fact}
         with open(CACHE_FILE, 'w') as f:
             json.dump(cache, f)
@@ -47,7 +44,7 @@ def get_fun_fact():
 
     except Exception as e:
         print(f"Fun Fact Error: {str(e)}")
-        return "Did you know credit cards were first used in the 1950s?"  # Fallback
+        return "Did you know credit cards were first used in the 1950s?"
 
 @app.route('/')
 def home():
@@ -78,7 +75,7 @@ def recommend():
     - Why it’s recommended: Explain how it fits the user’s profile, including any additional preferences if provided.
     - Rewards highlights: List 2-3 main perks (e.g., cashback rates, bonuses).
     - Comparison to current card: How it’s better or worse, using accurate details for {current_card}.
-    - Issuer website: Provide the official URL for applying (e.g., chase.com, citi.com).
+    - Issuer website: Provide the exact, official URL for applying to this specific card (e.g., https://www.chase.com/personal/credit-cards/freedom-unlimited for Chase Freedom Unlimited, https://www.citi.com/credit-cards/citi-double-cash-credit-card for Citi Double Cash), ensuring it links directly to the card’s application page, not a generic homepage.
     After the 3 recommendations, add a 'Preferred Card' section:
     - Preferred Card: [Card Name]
     - Why it’s preferred: Explain why this one stands out for the user, factoring in additional preferences if provided.
@@ -87,17 +84,17 @@ def recommend():
       - Why it’s recommended: [Reason]
       - Rewards highlights: [Perks]
       - Comparison to current card: [Comparison]
-      - Issuer website: [URL]
+      - Issuer website: [Exact URL]
     - Recommended Card 2: [Card Name]
       - Why it’s recommended: [Reason]
       - Rewards highlights: [Perks]
       - Comparison to current card: [Comparison]
-      - Issuer website: [URL]
+      - Issuer website: [Exact URL]
     - Recommended Card 3: [Card Name]
       - Why it’s recommended: [Reason]
       - Rewards highlights: [Perks]
       - Comparison to current card: [Comparison]
-      - Issuer website: [URL]
+      - Issuer website: [Exact URL]
     - Preferred Card: [Card Name]
       - Why it’s preferred: [Reason]
     Avoid citing sources (e.g., [1]) in the response.
@@ -109,7 +106,7 @@ def recommend():
             "Content-Type": "application/json"
         }
         payload = {
-            "model": "sonar-pro",  # Still sonar-pro for recommendations
+            "model": "sonar-pro",
             "messages": [{"role": "user", "content": prompt}],
             "max_tokens": 600
         }
@@ -132,6 +129,5 @@ def recommend():
         return render_template('results.html', error="An unexpected error occurred. Please try again.")
 
 if __name__ == '__main__':
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=False)
